@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 4b - Q3: Native JS vs jQuery</title>
+  <!-- jQuery 4.0.0 full build (not slim) -->
+  <script src="https://code.jquery.com/jquery-4.0.0.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; }
+    div, button { margin-bottom: 12px; }
+    .myStyle { background-color: coral; padding: 16px; }
+  </style>
+</head>
+<body>
+  <h1>jQuery DOM Manipulation</h1>
+
+  <div id="myElement">Original Text</div>
+
+  <div id="myDIV"><p>I am a myDIV.</p></div>
+
+  <button id="myButton">Click me</button>
+
+  <script>
+    // Native JavaScript versions (for comparison):
+    // (a) document.getElementById("myElement").textContent = "Modified Text";
+    // (b) document.querySelector("#myDIV").classList.add("myStyle");
+    // (c) document.getElementById("myButton").addEventListener("click", () => alert("Button clicked!"));
+
+    // jQuery equivalents - run after the DOM is ready
+    $(function () {
+      // (a) replace the text
+      $("#myElement").text("Modified Text");
+
+      // (b) add the CSS class
+      $("#myDIV").addClass("myStyle");
+
+      // (c) handle the click event
+      $("#myButton").on("click", function () {
+        alert("Button clicked!");
+      });
+    });
+  </script>
+</body>
+</html>

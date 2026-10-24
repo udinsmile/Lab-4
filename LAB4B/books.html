@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 4b - Q2: Books (fetch JSON)</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; line-height: 1.5; }
+    h1 { font-size: 1.5rem; }
+    section { border: 1px solid #ccc; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; }
+    h2 { font-size: 1.1rem; margin: 0 0 8px; }
+    .error { color: #b00020; background: #fdecea; border: 1px solid #f5c2c0; padding: 12px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>Book Information (loaded from books.json)</h1>
+
+  <section>
+    <h2>(a) Title of the first book</h2>
+    <p id="firstTitle">Loading...</p>
+  </section>
+
+  <section>
+    <h2>(b) Author of the second book</h2>
+    <p id="secondAuthor">Loading...</p>
+  </section>
+
+  <section>
+    <h2>(c) Genres of both books</h2>
+    <ul id="genreList"></ul>
+  </section>
+
+  <div id="message"></div>
+
+  <script>
+    async function loadBooks() {
+      const firstTitle = document.getElementById("firstTitle");
+      const secondAuthor = document.getElementById("secondAuthor");
+      const genreList = document.getElementById("genreList");
+      const message = document.getElementById("message");
+
+      try {
+        const response = await fetch("books.json");
+
+        // fetch() only rejects on network failure, so check the HTTP status ourselves
+        if (!response.ok) {
+          throw new Error(`Could not load books.json (HTTP ${response.status}).`);
+        }
+
+        let data;
+        try {
+          data = await response.json();   // parses the JSON text into a JS object
+        } catch {
+          throw new Error("books.json contains invalid JSON.");
+        }
+
+        const books = data.books;
+        if (!Array.isArray(books) || books.length < 2) {
+          throw new Error("books.json does not contain at least two books.");
+        }
+
+        // (a) and (b): textContent inserts plain text (no HTML parsing)
+        firstTitle.textContent = books[0].title;
+        secondAuthor.textContent = books[1].author;
+
+        // (c) one list item per book, grouped by title
+        books.forEach(book => {
+          const li = document.createElement("li");
+          const strong = document.createElement("strong");
+          strong.textContent = book.title;
+          li.appendChild(strong);
+          li.appendChild(document.createTextNode(" — " + book.genres.join(", ")));
+          genreList.appendChild(li);
+        });
+      } catch (error) {
+        firstTitle.textContent = "-";
+        secondAuthor.textContent = "-";
+        const p = document.createElement("p");
+        p.className = "error";
+        p.textContent = "Sorry, the book data could not be loaded. " + error.message;
+        message.appendChild(p);
+        console.error(error);
+      }
+    }
+
+    loadBooks();
+  </script>
+</body>
+</html>
