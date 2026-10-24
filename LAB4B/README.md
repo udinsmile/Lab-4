@@ -1,6 +1,7 @@
 # Lab 4b – Client-Side Scripting (JSON and jQuery)
 
 BIC21203 Web Development · Academic Session 2026/2027
+
 Muhammad Imaduddin bin Sumail (AI240041)
 
 ## Files
